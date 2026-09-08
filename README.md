@@ -49,9 +49,10 @@ npm run build
 2. [Game Design Document](docs/01-game-design.md): концепция, сюжет, механики, интерфейс и MVP.
 3. [Образовательная карта](docs/02-curriculum.md): курс Java Zero → Java Pro, методика и 20 заданий.
 4. [Java Learning Roadmap](JAVA_LEARNING_ROADMAP.md): навигация по отдельным файлам уроков для проектирования уровней.
-5. [Архитектура](docs/03-architecture.md): стек, контракты, запуск Java, данные и структура проекта.
-6. [План реализации](docs/04-implementation-plan.md): последовательность работ, зависимости и версии.
-7. [Ручная приёмка](docs/05-manual-acceptance.md): сценарии, которые проверяет пользователь.
+5. [Game Story Bible](GAME_STORY_BIBLE.md): модульный сюжетный канон, синхронизированный с ROADMAP.
+6. [Архитектура](docs/03-architecture.md): стек, контракты, запуск Java, данные и структура проекта.
+7. [План реализации](docs/04-implementation-plan.md): последовательность работ, зависимости и версии.
+8. [Ручная приёмка](docs/05-manual-acceptance.md): сценарии, которые проверяет пользователь.
 
 ## Текущие договорённости
 

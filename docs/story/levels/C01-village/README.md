@@ -43,6 +43,8 @@ Related Curriculum IDs: JAVA-C01-L01, JAVA-C01-L02, JAVA-C01-L03, JAVA-C01-L04, 
 5. Отличить рабочий код от комментария.
 6. Отправить первый сигнал.
 
+Подробные карточки квестов: [quests.md](/Users/mku/Documents/ChatGPT/JavaPlay/docs/story/levels/C01-village/quests.md).
+
 ## Optional Side Stories
 
 Старый смотритель оставил смешные комментарии о временном ремонте, который продержался десять лет.
@@ -76,4 +78,3 @@ Related Curriculum IDs: JAVA-C01-L01, JAVA-C01-L02, JAVA-C01-L03, JAVA-C01-L04, 
 ## Hook To Next Chapter
 
 Сигнал дошел, но соседняя долина отвечает странными числами расхода воды и топлива.
-

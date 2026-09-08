@@ -34,3 +34,8 @@
 | C19 | CH19. Слишком много связей | [C19-capital](/Users/mku/Documents/ChatGPT/JavaPlay/docs/story/levels/C19-capital/README.md) |
 | C20 | CH20. Релиз для живого города | [C20-guild](/Users/mku/Documents/ChatGPT/JavaPlay/docs/story/levels/C20-guild/README.md) |
 
+## Детализированные квесты
+
+| Level | Quest Pack |
+|---|---|
+| C01 | [Последний паром — quests.md](/Users/mku/Documents/ChatGPT/JavaPlay/docs/story/levels/C01-village/quests.md) |

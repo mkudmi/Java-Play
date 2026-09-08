@@ -12,7 +12,7 @@ export function App() {
           <span className="brand-mark" aria-hidden="true">J<span>•</span></span>
           <span>JavaPlay<small>ХРАНИТЕЛИ ЯДРА</small></span>
         </a>
-        <span className="build-badge"><span aria-hidden="true" /> Начало разработки · M0</span>
+        <span className="build-badge"><span aria-hidden="true" /> Исследование острова · M1</span>
       </header>
 
       <main id="main">
@@ -29,8 +29,8 @@ export function App() {
               <div><span className="eyebrow">ВАША ПЕРВАЯ ОСТАНОВКА</span><h2 id="region-title">Деревня Начала</h2></div>
               <span className="location-tag">Остров 01</span>
             </div>
-            <WorldCanvas />
-            <div className="world-caption"><span className="compass" aria-hidden="true">✦</span><p>Тихая бухта. Старый маяк. Начало большого пути.</p></div>
+            <WorldCanvas blocked={editorOpen} />
+            <div className="world-caption"><span className="compass" aria-hidden="true">✦</span><p>Нажми на мир · WASD / стрелки — идти · E — знакомство</p></div>
           </section>
 
           <aside className="journal" aria-labelledby="journal-title">
@@ -38,7 +38,7 @@ export function App() {
             <div className="journal-symbol" aria-hidden="true">⌘</div>
             <h2 id="journal-title">Язык, который<br />оживляет мир</h2>
             <p>Здесь ты будешь писать Java-код, чинить механизмы и возвращать свет островам.</p>
-            <div className="stage-note"><span className="note-label">СЕЙЧАС · ОСНОВА ПРИЛОЖЕНИЯ</span><p>Сцена и редактор уже подключены. Передвижение и персонажи появятся в следующей части.</p></div>
+            <div className="stage-note"><span className="note-label">СЕЙЧАС · ИССЛЕДУЙ ОСТРОВ</span><p>Ты на причале. Пройди по тропинке: Ира ждёт у маяка, а Ника — возле мастерской. Подойди ближе и нажми E.</p></div>
             <button className="primary-button" onClick={() => setEditorOpen((open) => !open)} aria-expanded={editorOpen} aria-controls="editor-panel">
               {editorOpen ? 'Свернуть редактор' : 'Открыть редактор'} <span aria-hidden="true">{editorOpen ? '−' : '↗'}</span>
             </button>

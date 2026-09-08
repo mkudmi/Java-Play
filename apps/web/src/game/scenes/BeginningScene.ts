@@ -1,9 +1,13 @@
 import Phaser from 'phaser';
 import type { WorldEventHandler } from '@javaplay/contracts';
 
-/** Static M0 scene. Movement, collisions and NPCs belong to M1. */
+import { Character } from '../entities/Character';
+import { WorldInput } from '../input/WorldInput';
+import { canStandAt, islandOutline, trees, villagers } from '../world/village';
 export class BeginningScene extends Phaser.Scene {
-  constructor(private readonly onEvent: WorldEventHandler) { super('beginning'); }
+  private hero!: Character;
+  private prompt!: Phaser.GameObjects.Text;
+  constructor(private readonly onEvent: WorldEventHandler, private readonly controls: WorldInput) { super('beginning'); }
 
   create() {
     const art = this.add.graphics();
@@ -18,7 +22,7 @@ export class BeginningScene extends Phaser.Scene {
       }
     }
 
-    const island = [170, 180, 275, 112, 430, 120, 532, 92, 685, 145, 786, 241, 775, 398, 666, 497, 490, 532, 325, 507, 181, 434, 127, 310];
+    const island = islandOutline;
     art.fillStyle(0x183c46, 0.55).fillEllipse(470, 364, 696, 400);
     art.fillStyle(0xb1bda1).fillPoints(this.points(island, 0, 16), true);
     art.fillStyle(0x789888).fillPoints(this.points(island), true);
@@ -29,10 +33,11 @@ export class BeginningScene extends Phaser.Scene {
     art.beginPath().moveTo(460, 503).lineTo(449, 396).lineTo(542, 323).lineTo(597, 207).strokePath();
     art.lineStyle(28, 0xd0c3a0, 1).lineBetween(457, 390, 318, 319);
 
-    this.house(art, 286, 272);
-    this.lighthouse(art, 594, 182);
-    for (const [x, y, size] of [[217, 238, 1], [256, 420, 1.2], [701, 322, 1.1], [656, 420, 0.85], [430, 198, 0.85], [376, 457, 0.65]] as const) {
-      this.tree(art, x, y, size);
+    art.lineBetween(542, 323, 748, 365);
+    this.house(this.add.graphics().setDepth(335), 286, 272);
+    this.lighthouse(this.add.graphics().setDepth(247), 594, 182);
+    for (const [x, y, size] of trees) {
+      this.tree(this.add.graphics().setDepth(y + 12), x, y, size);
     }
 
     // Landing pier.
@@ -50,7 +55,43 @@ export class BeginningScene extends Phaser.Scene {
     }
 
     this.add.text(542, 107, 'СТАРЫЙ МАЯК', { fontFamily: 'sans-serif', fontSize: '12px', color: '#f1e8cf', letterSpacing: 2 }).setAlpha(0.8);
+    const gate = this.add.graphics().setDepth(400);
+    gate.fillStyle(0xb7baa0).fillRect(731, 322, 12, 79).fillRect(757, 322, 12, 79);
+    gate.lineStyle(5, 0x405953);
+    for (let y = 336; y < 395; y += 13) gate.lineBetween(740, y, 759, y);
+    gate.fillStyle(0xceac6c).fillCircle(750, 365, 5);
+    for (const npc of villagers) {
+      new Character(this, npc.x, npc.y, npc.color);
+      this.add.text(npc.x, npc.y - 57, npc.name, { fontFamily: 'sans-serif', fontSize: '13px', color: '#ffffff', backgroundColor: '#193c43', padding: { x: 6, y: 3 } }).setOrigin(0.5).setDepth(1000);
+    }
+    this.hero = new Character(this, 462, 552, 0x3d91a0);
+    this.prompt = this.add.text(0, 0, '', { fontFamily: 'sans-serif', fontSize: '13px', color: '#193c43', backgroundColor: '#f3ebd4', padding: { x: 10, y: 7 } }).setOrigin(0.5, 1).setDepth(1001).setVisible(false);
+    this.cameras.main.setBounds(0, 0, 960, 640).setZoom(1.15).startFollow(this.hero, true, 0.12, 0.12);
     this.onEvent({ type: 'world.ready', regionId: 'beginning-village' });
+  }
+
+  update(_time: number, delta: number) {
+    if (!this.hero) return;
+    const direction = this.controls.direction();
+    const step = Math.min(delta, 50) * 0.15;
+    const previousX = this.hero.x, previousY = this.hero.y;
+    // Substeps plus axis separation prevent tunnelling and allow wall sliding.
+    const count = Math.max(1, Math.ceil(step / 3));
+    for (let index = 0; index < count; index++) {
+      const nextX = this.hero.x + direction.x * step / count;
+      if (canStandAt(nextX, this.hero.y)) this.hero.x = nextX;
+      const nextY = this.hero.y + direction.y * step / count;
+      if (canStandAt(this.hero.x, nextY)) this.hero.y = nextY;
+    }
+    this.hero.animateWalk(this.hero.x - previousX, this.hero.y - previousY, delta);
+    const nearby = villagers.filter((npc) => Math.hypot(npc.x - this.hero.x, npc.y - this.hero.y) <= 65)
+      .sort((a, b) => Math.hypot(a.x - this.hero.x, a.y - this.hero.y) - Math.hypot(b.x - this.hero.x, b.y - this.hero.y))[0];
+    this.prompt.setVisible(Boolean(nearby));
+    if (nearby) this.prompt.setPosition(nearby.x, nearby.y - 72).setText(`E · ${nearby.name}`);
+    if (this.controls.takeInteraction() && nearby) {
+      this.controls.setEnabled(false);
+      this.onEvent({ type: 'world.interact', npc: nearby });
+    }
   }
 
   private points(values: number[], dx = 0, dy = 0): Phaser.Geom.Point[] {

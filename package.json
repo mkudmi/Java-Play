@@ -1,0 +1,28 @@
+{
+  "name": "javaplay",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["apps/*", "packages/*"],
+  "engines": { "node": "25.6.0", "npm": "11.8.0" },
+  "packageManager": "npm@11.8.0",
+  "overrides": {
+    "dompurify": "3.4.15",
+    "esbuild": "0.28.2"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspace @javaplay/web",
+    "build": "npm run typecheck && npm run build --workspace @javaplay/web",
+    "preview": "npm run preview --workspace @javaplay/web",
+    "typecheck": "tsc --noEmit -p apps/web/tsconfig.json && tsc --noEmit -p packages/contracts/tsconfig.json",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.10.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "16.5.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.56.0"
+  }
+}
